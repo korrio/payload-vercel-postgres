@@ -695,6 +695,7 @@ export interface Franchise {
         id?: string | null;
       }[]
     | null;
+  status?: ('active' | 'inactive' | 'draft') | null;
   /**
    * Display this franchise prominently
    */
@@ -708,7 +709,6 @@ export interface Franchise {
   updatedBy?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1357,6 +1357,7 @@ export interface FranchisesSelect<T extends boolean = true> {
         alt?: T;
         id?: T;
       };
+  status?: T;
   featured?: T;
   new?: T;
   franchise_categories?: T;
@@ -1364,7 +1365,6 @@ export interface FranchisesSelect<T extends boolean = true> {
   updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
-  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1450,15 +1450,10 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?:
-      | ({
-          relationTo: 'posts';
-          value: number | Post;
-        } | null)
-      | ({
-          relationTo: 'franchises';
-          value: number | Franchise;
-        } | null);
+    doc?: {
+      relationTo: 'posts';
+      value: number | Post;
+    } | null;
     global?: string | null;
     user?: (number | null) | User;
   };

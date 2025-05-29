@@ -359,29 +359,29 @@ export const Franchises: CollectionConfig<'franchises'> = {
         },
       ],
     },
-    // {
-    //   name: 'status',
-    //   type: 'select',
-    //   label: 'Status',
-    //   defaultValue: 'active',
-    //   options: [
-    //     {
-    //       label: 'Active',
-    //       value: 'active',
-    //     },
-    //     {
-    //       label: 'Inactive',
-    //       value: 'inactive',
-    //     },
-    //     {
-    //       label: 'Draft',
-    //       value: 'draft',
-    //     },
-    //   ],
-    //   admin: {
-    //     position: 'sidebar',
-    //   },
-    // },
+    {
+      name: 'status',
+      type: 'select',
+      label: 'Status',
+      defaultValue: 'active',
+      options: [
+        {
+          label: 'Active',
+          value: 'active',
+        },
+        {
+          label: 'Inactive',
+          value: 'inactive',
+        },
+        {
+          label: 'Draft',
+          value: 'draft',
+        },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
     {
       name: 'featured',
       type: 'checkbox',
@@ -456,13 +456,14 @@ export const Franchises: CollectionConfig<'franchises'> = {
       },
     ],
   },
-  versions: {
-    drafts: {
-      autosave: {
-        interval: 100, // We set this interval for optimal live preview
-      },
-      schedulePublish: true,
-    },
-    maxPerDoc: 50,
-  },
+  versions: false
+  // versions: {
+  //   drafts: {
+  //     autosave: {
+  //       interval: 100, // We set this interval for optimal live preview
+  //     },
+  //     schedulePublish: true,
+  //   },
+  //   maxPerDoc: 50,
+  // },
 }

@@ -187,26 +187,26 @@ export const Banners: CollectionConfig = {
         return data;
       },
     ],
-    afterRead: [
-      async ({ doc, req }) => {
-        // Only increment for frontend requests, not in admin panel
-        if (req.user?.collection !== 'users') {
-          try {
-            // Increment asynchronously without waiting
-            req.payload.update({
-              collection: 'banners',
-              id: doc.id,
-              data: {
-                views: (doc.views || 0) + 1
-              }
-            });
-          } catch (error) {
-            console.error('Failed to increment pageview in hook:', error);
-          }
-        }
-        return doc;
-      }
-    ]
+    // afterRead: [
+    //   async ({ doc, req }) => {
+    //     // Only increment for frontend requests, not in admin panel
+    //     if (req.user?.collection !== 'users') {
+    //       try {
+    //         // Increment asynchronously without waiting
+    //         req.payload.update({
+    //           collection: 'banners',
+    //           id: doc.id,
+    //           data: {
+    //             views: (doc.views || 0) + 1
+    //           }
+    //         });
+    //       } catch (error) {
+    //         console.error('Failed to increment pageview in hook:', error);
+    //       }
+    //     }
+    //     return doc;
+    //   }
+    // ]
   },
   
 }

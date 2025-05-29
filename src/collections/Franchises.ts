@@ -38,7 +38,7 @@ export const Franchises: CollectionConfig<'franchises'> = {
   // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
   defaultPopulate: {
     title: true,
-    slug: true,
+    // slug: true,
     franchise_categories: true,
     // meta: {
     //   image: true,

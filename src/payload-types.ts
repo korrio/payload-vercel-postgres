@@ -70,6 +70,12 @@ export interface Config {
     users: User;
     media: Media;
     banners: Banner;
+    posts: Post;
+    categories: Category;
+    markets: Market;
+    franchises: Franchise;
+    franchise_categories: FranchiseCategory;
+    'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +85,12 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     banners: BannersSelect<false> | BannersSelect<true>;
+    posts: PostsSelect<false> | PostsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    markets: MarketsSelect<false> | MarketsSelect<true>;
+    franchises: FranchisesSelect<false> | FranchisesSelect<true>;
+    franchise_categories: FranchiseCategoriesSelect<false> | FranchiseCategoriesSelect<true>;
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -93,7 +105,13 @@ export interface Config {
     collection: 'users';
   };
   jobs: {
-    tasks: unknown;
+    tasks: {
+      schedulePublish: TaskSchedulePublish;
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
+    };
     workflows: unknown;
   };
 }
@@ -121,6 +139,8 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  name?: string | null;
+  role: 'admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -243,6 +263,561 @@ export interface Banner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts".
+ */
+export interface Post {
+  id: number;
+  title: string;
+  heroImage?: (number | null) | Media;
+  content_html?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  content_textarea?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  title: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "markets".
+ */
+export interface Market {
+  id: number;
+  meta: {
+    /**
+     * URL Slug สำหรับตลาด
+     */
+    slug: string;
+    /**
+     * คำอธิบาย SEO สำหรับหน้าตลาด
+     */
+    description?: string | null;
+  };
+  title: string;
+  name: {
+    /**
+     * ชื่อตลาดภาษาไทย
+     */
+    th: string;
+    /**
+     * ชื่อตลาดภาษาอังกฤษ (ไม่บังคับ)
+     */
+    en?: string | null;
+  };
+  tags?: {
+    /**
+     * แท็กของตลาดภาษาไทย
+     */
+    th?:
+      | {
+          tag?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * แท็กของตลาดภาษาอังกฤษ
+     */
+    en?:
+      | {
+          tag?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  business_hours?: {
+    description?: {
+      th?: string | null;
+      en?: string | null;
+    };
+    /**
+     * เวลาเปิด (รูปแบบ 24 ชั่วโมง)
+     */
+    open?: number | null;
+    /**
+     * เวลาปิด (รูปแบบ 24 ชั่วโมง)
+     */
+    close?: number | null;
+    days?: ('1' | '2' | '3' | '4' | '5' | '6' | '7')[] | null;
+  };
+  address?: {
+    /**
+     * รหัสสถานที่บน Google Maps
+     */
+    place_id?: string | null;
+    /**
+     * รหัสประเทศ ISO (ค่าเริ่มต้น: TH)
+     */
+    country_code?: string | null;
+    territory_id?: string | null;
+    district?: string | null;
+    district_id?: number | null;
+    sub_district?: string | null;
+    sub_district_id?: number | null;
+    province?: string | null;
+    province_id?: number | null;
+    post_code?: number | null;
+    detail?: {
+      th?: string | null;
+      en?: string | null;
+    };
+    location?: {
+      type?: 'Point' | null;
+      /**
+       * พิกัดในรูปแบบ [ลองจิจูด, ละติจูด]
+       */
+      coordinates?:
+        | {
+            coordinate?: number | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    /**
+     * ลิงก์ Google Maps สำหรับการนำทางโดยตรง
+     */
+    maps_url?: string | null;
+    /**
+     * ลิงก์ Google Maps สำหรับฝัง iframe
+     */
+    maps_embed_url?: string | null;
+  };
+  /**
+   * รูปภาพหน้าปกของตลาด
+   */
+  cover?: (number | null) | Media;
+  /**
+   * coverUrl
+   */
+  coverUrl?: string | null;
+  /**
+   * แกลเลอรีรูปภาพของตลาด
+   */
+  gallery?:
+    | {
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Upload images related to this franchise
+   */
+  images?:
+    | {
+        image?: (number | null) | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * แกลเลอรีรูปภาพของตลาด
+   */
+  galleryUrl?:
+    | {
+        image?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  price_text: string;
+  price?: {
+    description?: {
+      th?: string | null;
+      en?: string | null;
+    };
+    month?: {
+      min?: number | null;
+      max?: number | null;
+    };
+  };
+  booth_size?: {
+    description?: {
+      th?: string | null;
+      en?: string | null;
+    };
+    sqm?: {
+      min?: number | null;
+      max?: number | null;
+    };
+  };
+  booth_summary?: {
+    /**
+     * จำนวนแผงค้าที่ว่าง
+     */
+    available?: number | null;
+    /**
+     * จำนวนแผงค้าทั้งหมด
+     */
+    total?: number | null;
+  };
+  booths?:
+    | {
+        id?: string | null;
+        market?: (number | null) | Market;
+        price?: {
+          /**
+           * ค่าเช่ารายเดือน (บาท)
+           */
+          month?: number | null;
+          /**
+           * ค่าแรกเข้าครั้งเดียว (บาท)
+           */
+          entrance_fee?: number | null;
+          /**
+           * เงินประกัน (บาท)
+           */
+          insurance?: number | null;
+          /**
+           * ค่าเช่าล่วงหน้า (บาท)
+           */
+          advance_rental?: number | null;
+          /**
+           * ค่าใช้จ่ายอื่นๆ (บาท)
+           */
+          other_expenses?: number | null;
+          /**
+           * อัตราค่าน้ำ (บาท)
+           */
+          water_bill?: number | null;
+          /**
+           * อัตราค่าไฟฟ้า (บาท/หน่วย)
+           */
+          electricity_bill?: number | null;
+        };
+        status?: ('AVAILABLE' | 'OCCUPIED' | 'RESERVED' | 'MAINTENANCE') | null;
+      }[]
+    | null;
+  facility?: {
+    /**
+     * จำนวนที่จอดรถ
+     */
+    parking?: number | null;
+    /**
+     * จำนวนห้องน้ำ
+     */
+    toilet?: number | null;
+  };
+  rating?: {
+    /**
+     * คะแนนการให้คะแนน (0-5)
+     */
+    score?: number | null;
+    /**
+     * จำนวนการให้คะแนน
+     */
+    count?: number | null;
+  };
+  promotions?:
+    | {
+        id?: string | null;
+        name?: {
+          th?: string | null;
+          en?: string | null;
+        };
+        type?: ('PERCENTAGE_DISCOUNT' | 'FIXED_AMOUNT_DISCOUNT' | 'FREE_GIFT') | null;
+        discount_value?: number | null;
+        start_date?: string | null;
+        end_date?: string | null;
+        active?: boolean | null;
+      }[]
+    | null;
+  /**
+   * ทำเครื่องหมายเป็นตลาดยอดนิยม
+   */
+  hot?: boolean | null;
+  /**
+   * เปิดใช้งานเพื่อเผยแพร่ตลาดนี้
+   */
+  published?: boolean | null;
+  /**
+   * วันและเวลาที่เผยแพร่
+   */
+  published_at?: string | null;
+  tracking?: {
+    /**
+     * จำนวนคลิก/การเข้าชม
+     */
+    click?: number | null;
+  };
+  /**
+   * ผู้ใช้ที่เกี่ยวข้อง (เช่น เจ้าของตลาด ผู้จัดการ)
+   */
+  users?: (number | User)[] | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchises".
+ */
+export interface Franchise {
+  id: number;
+  title: string;
+  fcid?: string | null;
+  name_th: string;
+  name_en?: string | null;
+  description?: string | null;
+  products?: string | null;
+  benefits?: string | null;
+  packages?: string | null;
+  conditions?: string | null;
+  business_type?: string | null;
+  franchise_fee?: {
+    amount?: number | null;
+    unit?: string | null;
+  };
+  investment?: {
+    amount?: number | null;
+    unit?: string | null;
+  };
+  working_capital?: {
+    amount?: number | null;
+    unit?: string | null;
+  };
+  contract_period?: {
+    amount?: number | null;
+    unit?: string | null;
+  };
+  roi_period?: {
+    amount?: number | null;
+    unit?: string | null;
+  };
+  branch_info?: {
+    headquarters?: string | null;
+    franchisee?: string | null;
+    international?: string | null;
+  };
+  contact_info?: {
+    company_name?: string | null;
+    executive_name?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    website?: string | null;
+  };
+  social_stats?: {
+    views?: string | null;
+    requests?: string | null;
+    votes?: string | null;
+  };
+  historical_growth?:
+    | {
+        year?: string | null;
+        headquarters?: number | null;
+        franchisee?: number | null;
+        international?: number | null;
+        total?: number | null;
+        change?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  investment_packages?:
+    | {
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Upload franchise logo
+   */
+  logo?: (number | null) | Media;
+  /**
+   * Upload images related to this franchise
+   */
+  images?:
+    | {
+        image: number | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Display this franchise prominently
+   */
+  featured?: boolean | null;
+  /**
+   * Display this franchise prominently
+   */
+  new?: boolean | null;
+  franchise_categories?: (number | FranchiseCategory)[] | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise_categories".
+ */
+export interface FranchiseCategory {
+  id: number;
+  title: string;
+  name_en?: string | null;
+  description?: string | null;
+  icon?: (number | null) | Media;
+  parent?: (number | null) | FranchiseCategory;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs".
+ */
+export interface PayloadJob {
+  id: number;
+  /**
+   * Input data provided to the job
+   */
+  input?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  taskStatus?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  completedAt?: string | null;
+  totalTried?: number | null;
+  /**
+   * If hasError is true this job will not be retried
+   */
+  hasError?: boolean | null;
+  /**
+   * If hasError is true, this is the error that caused it
+   */
+  error?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Task execution log
+   */
+  log?:
+    | {
+        executedAt: string;
+        completedAt: string;
+        taskSlug: 'inline' | 'schedulePublish';
+        taskID: string;
+        input?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        output?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        state: 'failed' | 'succeeded';
+        error?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  taskSlug?: ('inline' | 'schedulePublish') | null;
+  queue?: string | null;
+  waitUntil?: string | null;
+  processing?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -259,6 +834,30 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'banners';
         value: number | Banner;
+      } | null)
+    | ({
+        relationTo: 'posts';
+        value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'markets';
+        value: number | Market;
+      } | null)
+    | ({
+        relationTo: 'franchises';
+        value: number | Franchise;
+      } | null)
+    | ({
+        relationTo: 'franchise_categories';
+        value: number | FranchiseCategory;
+      } | null)
+    | ({
+        relationTo: 'payload-jobs';
+        value: number | PayloadJob;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -307,6 +906,8 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -429,6 +1030,388 @@ export interface BannersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "posts_select".
+ */
+export interface PostsSelect<T extends boolean = true> {
+  title?: T;
+  heroImage?: T;
+  content_html?: T;
+  content_textarea?: T;
+  content?: T;
+  relatedPosts?: T;
+  categories?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  title?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "markets_select".
+ */
+export interface MarketsSelect<T extends boolean = true> {
+  meta?:
+    | T
+    | {
+        slug?: T;
+        description?: T;
+      };
+  title?: T;
+  name?:
+    | T
+    | {
+        th?: T;
+        en?: T;
+      };
+  tags?:
+    | T
+    | {
+        th?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
+        en?:
+          | T
+          | {
+              tag?: T;
+              id?: T;
+            };
+      };
+  business_hours?:
+    | T
+    | {
+        description?:
+          | T
+          | {
+              th?: T;
+              en?: T;
+            };
+        open?: T;
+        close?: T;
+        days?: T;
+      };
+  address?:
+    | T
+    | {
+        place_id?: T;
+        country_code?: T;
+        territory_id?: T;
+        district?: T;
+        district_id?: T;
+        sub_district?: T;
+        sub_district_id?: T;
+        province?: T;
+        province_id?: T;
+        post_code?: T;
+        detail?:
+          | T
+          | {
+              th?: T;
+              en?: T;
+            };
+        location?:
+          | T
+          | {
+              type?: T;
+              coordinates?:
+                | T
+                | {
+                    coordinate?: T;
+                    id?: T;
+                  };
+            };
+        maps_url?: T;
+        maps_embed_url?: T;
+      };
+  cover?: T;
+  coverUrl?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  galleryUrl?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  price_text?: T;
+  price?:
+    | T
+    | {
+        description?:
+          | T
+          | {
+              th?: T;
+              en?: T;
+            };
+        month?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+            };
+      };
+  booth_size?:
+    | T
+    | {
+        description?:
+          | T
+          | {
+              th?: T;
+              en?: T;
+            };
+        sqm?:
+          | T
+          | {
+              min?: T;
+              max?: T;
+            };
+      };
+  booth_summary?:
+    | T
+    | {
+        available?: T;
+        total?: T;
+      };
+  booths?:
+    | T
+    | {
+        id?: T;
+        market?: T;
+        price?:
+          | T
+          | {
+              month?: T;
+              entrance_fee?: T;
+              insurance?: T;
+              advance_rental?: T;
+              other_expenses?: T;
+              water_bill?: T;
+              electricity_bill?: T;
+            };
+        status?: T;
+      };
+  facility?:
+    | T
+    | {
+        parking?: T;
+        toilet?: T;
+      };
+  rating?:
+    | T
+    | {
+        score?: T;
+        count?: T;
+      };
+  promotions?:
+    | T
+    | {
+        id?: T;
+        name?:
+          | T
+          | {
+              th?: T;
+              en?: T;
+            };
+        type?: T;
+        discount_value?: T;
+        start_date?: T;
+        end_date?: T;
+        active?: T;
+      };
+  hot?: T;
+  published?: T;
+  published_at?: T;
+  tracking?:
+    | T
+    | {
+        click?: T;
+      };
+  users?: T;
+  created_at?: T;
+  updated_at?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchises_select".
+ */
+export interface FranchisesSelect<T extends boolean = true> {
+  title?: T;
+  fcid?: T;
+  name_th?: T;
+  name_en?: T;
+  description?: T;
+  products?: T;
+  benefits?: T;
+  packages?: T;
+  conditions?: T;
+  business_type?: T;
+  franchise_fee?:
+    | T
+    | {
+        amount?: T;
+        unit?: T;
+      };
+  investment?:
+    | T
+    | {
+        amount?: T;
+        unit?: T;
+      };
+  working_capital?:
+    | T
+    | {
+        amount?: T;
+        unit?: T;
+      };
+  contract_period?:
+    | T
+    | {
+        amount?: T;
+        unit?: T;
+      };
+  roi_period?:
+    | T
+    | {
+        amount?: T;
+        unit?: T;
+      };
+  branch_info?:
+    | T
+    | {
+        headquarters?: T;
+        franchisee?: T;
+        international?: T;
+      };
+  contact_info?:
+    | T
+    | {
+        company_name?: T;
+        executive_name?: T;
+        address?: T;
+        phone?: T;
+        email?: T;
+        website?: T;
+      };
+  social_stats?:
+    | T
+    | {
+        views?: T;
+        requests?: T;
+        votes?: T;
+      };
+  historical_growth?:
+    | T
+    | {
+        year?: T;
+        headquarters?: T;
+        franchisee?: T;
+        international?: T;
+        total?: T;
+        change?: T;
+        id?: T;
+      };
+  investment_packages?:
+    | T
+    | {
+        description?: T;
+        id?: T;
+      };
+  logo?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  featured?: T;
+  new?: T;
+  franchise_categories?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise_categories_select".
+ */
+export interface FranchiseCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  name_en?: T;
+  description?: T;
+  icon?: T;
+  parent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-jobs_select".
+ */
+export interface PayloadJobsSelect<T extends boolean = true> {
+  input?: T;
+  taskStatus?: T;
+  completedAt?: T;
+  totalTried?: T;
+  hasError?: T;
+  error?: T;
+  log?:
+    | T
+    | {
+        executedAt?: T;
+        completedAt?: T;
+        taskSlug?: T;
+        taskID?: T;
+        input?: T;
+        output?: T;
+        state?: T;
+        error?: T;
+        id?: T;
+      };
+  taskSlug?: T;
+  queue?: T;
+  waitUntil?: T;
+  processing?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -458,6 +1441,28 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskSchedulePublish".
+ */
+export interface TaskSchedulePublish {
+  input: {
+    type?: ('publish' | 'unpublish') | null;
+    locale?: string | null;
+    doc?:
+      | ({
+          relationTo: 'posts';
+          value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'franchises';
+          value: number | Franchise;
+        } | null);
+    global?: string | null;
+    user?: (number | null) | User;
+  };
+  output?: unknown;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

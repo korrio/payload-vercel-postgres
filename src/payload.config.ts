@@ -8,6 +8,12 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Banners } from './collections/Banners'
+import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
+
+import { Markets } from './collections/Markets'
+import { Franchises } from './collections/Franchises'
+import { FranchiseCategories } from './collections/FranchiseCategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -19,7 +25,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Banners],
+  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories],
   upload: {
     limits: {
       fileSize: 5000000, // 5MB, written in bytes
@@ -30,6 +36,12 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  cors: [
+        process.env.PAYLOAD_PUBLIC_SERVER_URL,
+        process.env.PAYLOAD_PUBLIC_SITE_URL,
+        "http://localhost:3000",
+        "http://localhost:3030",
+    ].filter((url): url is string => typeof url === 'string'),
   db: vercelPostgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',

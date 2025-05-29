@@ -1,7 +1,7 @@
 import type { Payload, PayloadRequest } from 'payload'
 // import { seedFranchises } from './seedFranchises'
 // import { seedFranchisesDbd } from './seedFranchisesDbd'
-// import { uploadFranchisesDbdLogos } from './uploadFranchisesDbdLogos'
+import { uploadFranchisesDbdLogos } from './uploadFranchisesDbdLogos'
 // import { seedMarkets } from './seedMarkets'
 
 // import { updateFranchiseFee } from './updateFranchiseFee'
@@ -27,7 +27,7 @@ export const seed = async ({
   // Seed franchises data
   // await seedFranchises({ payload, req })
   // await seedFranchisesDbd({ payload, req })
-  // await uploadFranchisesDbdLogos({ payload, req })
+  await uploadFranchisesDbdLogos({ payload, req })
 
   // await updateFranchiseFee({ payload, req })
 

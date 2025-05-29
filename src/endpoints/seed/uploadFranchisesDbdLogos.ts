@@ -52,11 +52,11 @@ export const uploadFranchisesDbdLogos = async ({
   payload.logger.info(`Found ${franchises.docs.length} franchises to process...`)
 
   // Get the logo URLs from the original JSON file
-  const originalData = await import('./franchise_data_dbd_20250506_235749.json') as { default: FranchiseData[] }
+  const originalData = await import('./franchise_data_dbd_20250506_235749.json') as { default: any[] }
   
   // Create a map of FCIDs to logo URLs
   const logoMap: LogoMap = {}
-  originalData.default.forEach((franchise: FranchiseData) => {
+  originalData.default.forEach((franchise: any) => {
     if (franchise.id && franchise.logo) {
       logoMap[franchise.id] = franchise.logo
     }
@@ -70,14 +70,14 @@ export const uploadFranchisesDbdLogos = async ({
     const logoUrl = logoMap[franchise.fcid as string]
     
     if (!logoUrl) {
-      payload.logger.warn(`No logo URL found for franchise ${franchise.brand_name} (${franchise.id})`)
+      //payload.logger.warn(`No logo URL found for franchise ${franchise.brand_name} (${franchise.id})`)
       failCount++
       continue
     }
     
     try {
       // Download the logo
-      payload.logger.info(`Downloading logo for ${franchise.brand_name} from ${logoUrl}...`)
+      //payload.logger.info(`Downloading logo for ${franchise.brand_name} from ${logoUrl}...`)
       const response = await fetch(logoUrl)
       
       if (!response.ok) {

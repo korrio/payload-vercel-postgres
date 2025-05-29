@@ -37,8 +37,8 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   cors: [
-        process.env.PAYLOAD_PUBLIC_SERVER_URL,
-        process.env.PAYLOAD_PUBLIC_SITE_URL,
+        "https://franchise-frontend-prod.vercel.app",
+        "https://bestfranchisethailand.com",
         "http://localhost:3000",
         "http://localhost:3030",
     ].filter((url): url is string => typeof url === 'string'),

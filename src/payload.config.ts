@@ -55,12 +55,12 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || '',
     },
   }),
-  plugins: [
-    vercelBlobStorage({
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN || '',
-    }),
-  ],
+  // plugins: [
+  //   vercelBlobStorage({
+  //     collections: {
+  //       media: true,
+  //     },
+  //     token: process.env.BLOB_READ_WRITE_TOKEN || '',
+  //   }),
+  // ],
 })

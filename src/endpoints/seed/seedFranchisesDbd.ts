@@ -144,20 +144,103 @@
 //   let succeeded = 0;
 //   let failed = 0;
 //   const errors: string[] = [];
+
   
 //   // Process franchises one by one with minimal data first
 //   for (let i = 0; i < franchiseData.length; i++) {
 //     const franchise = franchiseData[i];
     
 //     try {
+
+//   		const minInvestment = parseFloat(franchise.min_investment) || 0;
+//     const maxInvestment = parseFloat(franchise.max_investment) || 0;
+    
+//     // Use average of min and max for investment amount, or just one if the other is 0
+//     const investmentAmount = minInvestment && maxInvestment 
+//       ? (minInvestment + maxInvestment) / 2 
+//       : (minInvestment || maxInvestment);
+
+//     // Extract number of branches from the branches string
+//     const branchCount = extractNumberFromString(franchise.branches);
+
+//     // Process entrance fee string to get number
+//     const entranceFee = extractNumberFromString(franchise.entrance_fee);
+    
+//     // Map the category from Thai name to category ID
+//     // const categoryId = categoryMapping[franchise.category_name] || null;
 //       // Create minimal franchise data object with only required fields
 //       const minimalFranchiseData = {
+//         // fcid: franchise.id.toString(),
+//         // title: franchise.brand_name || `Franchise ${i + 1}`,
+//         // name_th: franchise.brand_name || `Franchise ${i + 1}`,
+//         // description: franchise.short_description || franchise.description || '',
+//         // business_type: franchise.franchise_type || '',
 //         fcid: franchise.id.toString(),
-//         title: franchise.brand_name || `Franchise ${i + 1}`,
-//         name_th: franchise.brand_name || `Franchise ${i + 1}`,
-//         description: franchise.short_description || franchise.description || '',
-//         business_type: franchise.franchise_type || '',
-//         slug: extractSlugFromUrl(franchise.slug) || createSlug(franchise.brand_name) || `franchise-${i + 1}`,
+//       title: franchise.brand_name,
+//       name_th: franchise.brand_name,
+//       name_en: null, // No English name provided in the data
+//       description: franchise.short_description || franchise.description || '',
+//       business_type: franchise.franchise_type || '',
+//       slug: `franchise-${i + 1}`,
+      
+//       // Process franchise_fee from entrance_fee
+//       franchise_fee: franchise.entrance_fee ? {
+//         amount: franchise.entrance_fee,
+//         unit: franchise.entrance_fee
+//       } : undefined,
+      
+//       // Process investment from min_investment/max_investment
+//       investment: investmentAmount ? {
+//         amount: investmentAmount,
+//         unit: 'บาท'
+//       } : undefined,
+      
+//       // No working_capital in provided data
+//       working_capital: undefined,
+      
+//       // No contract_period in provided data
+//       contract_period: undefined,
+      
+//       // No roi_period in provided data
+//       roi_period: undefined,
+      
+//       // Process branch information
+//       branch_info: {
+//         headquarters: '1', // Assuming headquarters is always 1
+//         franchisee: branchCount ? branchCount.toString() : '0',
+//         international: '0' // No international data provided
+//       },
+      
+//       // Process contact_info
+//       contact_info: {
+//         company_name: franchise.company_name || '',
+//         executive_name: franchise.contact_name || '',
+//         address: franchise.address || '',
+//         phone: cleanPhoneNumber(franchise.phone) || cleanPhoneNumber(franchise.mobile) || '',
+//         email: cleanEmail(franchise.email) || '',
+//         website: cleanWebsite(franchise.website) || ''
+//       },
+      
+//       // Process social_stats (not provided in current data)
+//       social_stats: {
+//         views: franchise.rating_count?.toString() || '0',
+//         requests: '0',
+//         votes: franchise.rating_sum || '0'
+//       },
+      
+//       // Empty historical_growth array
+//       historical_growth: [],
+      
+//       // Default status to active
+//       status: 'active',
+      
+//       // Add logo URL if available
+//       logo_url: franchise.logo || undefined,
+      
+//       // Set the category reference
+//       // category: categoryId,
+//       // franchise_categories: [categoryId]
+        
 //       };
       
 //       // Validate required fields

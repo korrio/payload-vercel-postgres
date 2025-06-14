@@ -238,37 +238,37 @@ export const Markets: CollectionConfig = {
                     },
                   ],
                 },
-                {
-                  name: 'location',
-                  type: 'group',
-                  fields: [
-                    {
-                      name: 'type',
-                      type: 'select',
-                      defaultValue: 'Point',
-                      options: [
-                        {
-                          label: 'Point',
-                          value: 'Point',
-                        },
-                      ],
-                    },
-                    {
-                      name: 'coordinates',
-                      type: 'array',
-                      fields: [
-                        {
-                          name: 'coordinate',
-                          type: 'number',
-                          required: false,
-                        },
-                      ],
-                      admin: {
-                        description: 'พิกัดในรูปแบบ [ลองจิจูด, ละติจูด]',
-                      },
-                    },
-                  ],
-                },
+                // {
+                //   name: 'location',
+                //   type: 'group',
+                //   fields: [
+                //     {
+                //       name: 'type',
+                //       type: 'select',
+                //       defaultValue: 'Point',
+                //       options: [
+                //         {
+                //           label: 'Point',
+                //           value: 'Point',
+                //         },
+                //       ],
+                //     },
+                //     {
+                //       name: 'coordinates',
+                //       type: 'array',
+                //       fields: [
+                //         {
+                //           name: 'coordinate',
+                //           type: 'number',
+                //           required: false,
+                //         },
+                //       ],
+                //       admin: {
+                //         description: 'พิกัดในรูปแบบ [ลองจิจูด, ละติจูด]',
+                //       },
+                //     },
+                //   ],
+                // },
                 {
                   name: 'maps_url',
                   type: 'text',
@@ -741,15 +741,15 @@ export const Markets: CollectionConfig = {
             },
             
             // Relations
-            {
-              name: 'users',
-              type: 'relationship',
-              relationTo: 'users',
-              hasMany: true,
-              admin: {
-                description: 'ผู้ใช้ที่เกี่ยวข้อง (เช่น เจ้าของตลาด ผู้จัดการ)',
-              },
-            },
+            // {
+            //   name: 'users',
+            //   type: 'relationship',
+            //   relationTo: 'users',
+            //   hasMany: true,
+            //   admin: {
+            //     description: 'ผู้ใช้ที่เกี่ยวข้อง (เช่น เจ้าของตลาด ผู้จัดการ)',
+            //   },
+            // },
             {
               name: 'created_at',
               type: 'date',

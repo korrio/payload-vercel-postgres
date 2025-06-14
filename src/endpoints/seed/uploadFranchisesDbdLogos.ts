@@ -32,9 +32,9 @@ export const uploadFranchisesDbdLogos = async ({
   const franchises = await payload.find({
     collection: 'franchises',
     where: {
-      // logo: {
-      //   exists: false,
-      // },
+      logo: {
+        exists: false,
+      },
       fcid: {
         exists: true,
       }

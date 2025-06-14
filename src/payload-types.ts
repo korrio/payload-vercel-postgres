@@ -422,18 +422,6 @@ export interface Market {
       th?: string | null;
       en?: string | null;
     };
-    location?: {
-      type?: 'Point' | null;
-      /**
-       * พิกัดในรูปแบบ [ลองจิจูด, ละติจูด]
-       */
-      coordinates?:
-        | {
-            coordinate?: number | null;
-            id?: string | null;
-          }[]
-        | null;
-    };
     /**
      * ลิงก์ Google Maps สำหรับการนำทางโดยตรง
      */
@@ -599,10 +587,6 @@ export interface Market {
      */
     click?: number | null;
   };
-  /**
-   * ผู้ใช้ที่เกี่ยวข้อง (เช่น เจ้าของตลาด ผู้จัดการ)
-   */
-  users?: (number | User)[] | null;
   created_at?: string | null;
   updated_at?: string | null;
   createdBy?: (number | null) | User;
@@ -1127,17 +1111,6 @@ export interface MarketsSelect<T extends boolean = true> {
               th?: T;
               en?: T;
             };
-        location?:
-          | T
-          | {
-              type?: T;
-              coordinates?:
-                | T
-                | {
-                    coordinate?: T;
-                    id?: T;
-                  };
-            };
         maps_url?: T;
         maps_embed_url?: T;
       };
@@ -1255,7 +1228,6 @@ export interface MarketsSelect<T extends boolean = true> {
     | {
         click?: T;
       };
-  users?: T;
   created_at?: T;
   updated_at?: T;
   createdBy?: T;

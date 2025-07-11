@@ -14,6 +14,20 @@ import { Categories } from './collections/Categories'
 import { Markets } from './collections/Markets'
 import { Franchises } from './collections/Franchises'
 import { FranchiseCategories } from './collections/FranchiseCategories'
+import { Views } from './collections/Views'
+
+import { 
+  franchiseViewsReport,
+  categoryViewsReport,
+  newFranchisesReport,
+  totalFranchisesReport,
+  marketViewsReport,
+  provinceViewsReport,
+  newMarketsReport,
+  totalMarketsReport,
+  allReportsData
+} from './endpoints/reports'
+import { trackView } from './endpoints/track-view'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,8 +46,63 @@ export default buildConfig({
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/BeforeDashboard', '@/components/SummaryDashboard'],
     },
+    meta: {
+      titleSuffix: '- Franchise CMS',
+    },
   },
-  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories],
+  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views],
+  endpoints: [
+    {
+      path: '/reports/franchise-views',
+      method: 'get',
+      handler: franchiseViewsReport,
+    },
+    {
+      path: '/reports/category-views',
+      method: 'get',
+      handler: categoryViewsReport,
+    },
+    {
+      path: '/reports/new-franchises',
+      method: 'get',
+      handler: newFranchisesReport,
+    },
+    {
+      path: '/reports/total-franchises',
+      method: 'get',
+      handler: totalFranchisesReport,
+    },
+    {
+      path: '/reports/market-views',
+      method: 'get',
+      handler: marketViewsReport,
+    },
+    {
+      path: '/reports/province-views',
+      method: 'get',
+      handler: provinceViewsReport,
+    },
+    {
+      path: '/reports/new-markets',
+      method: 'get',
+      handler: newMarketsReport,
+    },
+    {
+      path: '/reports/total-markets',
+      method: 'get',
+      handler: totalMarketsReport,
+    },
+    {
+      path: '/reports/all',
+      method: 'get',
+      handler: allReportsData,
+    },
+    {
+      path: '/track-view',
+      method: 'post',
+      handler: trackView,
+    },
+  ],
   upload: {
     limits: {
       fileSize: 5000000, // 5MB, written in bytes

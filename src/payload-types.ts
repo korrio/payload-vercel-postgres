@@ -75,6 +75,7 @@ export interface Config {
     markets: Market;
     franchises: Franchise;
     franchise_categories: FranchiseCategory;
+    views: View;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     markets: MarketsSelect<false> | MarketsSelect<true>;
     franchises: FranchisesSelect<false> | FranchisesSelect<true>;
     franchise_categories: FranchiseCategoriesSelect<false> | FranchiseCategoriesSelect<true>;
+    views: ViewsSelect<false> | ViewsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -710,6 +712,57 @@ export interface FranchiseCategory {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "views".
+ */
+export interface View {
+  id: number;
+  /**
+   * The collection that was viewed
+   */
+  collectionName: 'franchises' | 'markets' | 'posts';
+  /**
+   * The ID of the document that was viewed
+   */
+  documentId: string;
+  /**
+   * The title of the document for easy reference
+   */
+  documentTitle?: string | null;
+  /**
+   * Category ID (for franchises) or Province (for markets)
+   */
+  categoryId?: string | null;
+  /**
+   * Category name or Province name for easy reference
+   */
+  categoryName?: string | null;
+  /**
+   * User ID if logged in
+   */
+  userId?: string | null;
+  /**
+   * Session ID for anonymous users
+   */
+  sessionId?: string | null;
+  /**
+   * IP address of the viewer
+   */
+  ipAddress?: string | null;
+  /**
+   * User agent string
+   */
+  userAgent?: string | null;
+  /**
+   * Referrer URL
+   */
+  referrer?: string | null;
+  /**
+   * When the view occurred
+   */
+  viewedAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -838,6 +891,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'franchise_categories';
         value: number | FranchiseCategory;
+      } | null)
+    | ({
+        relationTo: 'views';
+        value: number | View;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1350,6 +1407,23 @@ export interface FranchiseCategoriesSelect<T extends boolean = true> {
   parent?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "views_select".
+ */
+export interface ViewsSelect<T extends boolean = true> {
+  collectionName?: T;
+  documentId?: T;
+  documentTitle?: T;
+  categoryId?: T;
+  categoryName?: T;
+  userId?: T;
+  sessionId?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  referrer?: T;
+  viewedAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

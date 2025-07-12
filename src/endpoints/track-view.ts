@@ -1,6 +1,9 @@
 export const trackView = async (req: any) => {
   try {
     const { payload } = req
+    
+    // Read the request body
+    const data = await req.json()
     const { 
       collectionName, 
       documentId, 
@@ -9,7 +12,7 @@ export const trackView = async (req: any) => {
       categoryName, 
       userId, 
       sessionId 
-    } = req.body
+    } = data
 
     // Get IP address
     const ipAddress = req.headers['x-forwarded-for'] || 
@@ -25,6 +28,8 @@ export const trackView = async (req: any) => {
     // Get referrer
     const referrer = req.headers['referer'] || req.headers['referrer'] || ''
 
+    console.log("data",data)
+
     // Validate required fields
     if (!collectionName || !documentId) {
       return Response.json({
@@ -38,7 +43,7 @@ export const trackView = async (req: any) => {
       collection: 'views',
       data: {
         collectionName,
-        documentId,
+        documentId: String(documentId),
         documentTitle: documentTitle || '',
         categoryId: categoryId || '',
         categoryName: categoryName || '',

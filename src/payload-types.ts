@@ -76,6 +76,7 @@ export interface Config {
     franchises: Franchise;
     franchise_categories: FranchiseCategory;
     views: View;
+    'user-logs': UserLog;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     franchises: FranchisesSelect<false> | FranchisesSelect<true>;
     franchise_categories: FranchiseCategoriesSelect<false> | FranchiseCategoriesSelect<true>;
     views: ViewsSelect<false> | ViewsSelect<true>;
+    'user-logs': UserLogsSelect<false> | UserLogsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -763,6 +765,74 @@ export interface View {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-logs".
+ */
+export interface UserLog {
+  id: number;
+  /**
+   * The user who performed the activity
+   */
+  user: number | User;
+  /**
+   * Type of activity performed
+   */
+  activity:
+    | 'login'
+    | 'logout'
+    | 'profile_update'
+    | 'password_change'
+    | 'email_change'
+    | 'franchise_created'
+    | 'franchise_updated'
+    | 'franchise_deleted'
+    | 'market_created'
+    | 'market_updated'
+    | 'market_deleted'
+    | 'post_created'
+    | 'post_updated'
+    | 'post_deleted'
+    | 'media_uploaded'
+    | 'media_deleted'
+    | 'failed_login';
+  /**
+   * Additional details about the activity (e.g., document ID, changes made)
+   */
+  details?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * IP address of the user
+   */
+  ipAddress?: string | null;
+  /**
+   * User agent string
+   */
+  userAgent?: string | null;
+  /**
+   * Session identifier
+   */
+  sessionId?: string | null;
+  /**
+   * When the activity occurred
+   */
+  timestamp: string;
+  /**
+   * Whether the activity was successful
+   */
+  success?: boolean | null;
+  /**
+   * Error message if the activity failed
+   */
+  errorMessage?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -895,6 +965,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'views';
         value: number | View;
+      } | null)
+    | ({
+        relationTo: 'user-logs';
+        value: number | UserLog;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1424,6 +1498,21 @@ export interface ViewsSelect<T extends boolean = true> {
   userAgent?: T;
   referrer?: T;
   viewedAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "user-logs_select".
+ */
+export interface UserLogsSelect<T extends boolean = true> {
+  user?: T;
+  activity?: T;
+  details?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  sessionId?: T;
+  timestamp?: T;
+  success?: T;
+  errorMessage?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

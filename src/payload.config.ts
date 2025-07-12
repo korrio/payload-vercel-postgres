@@ -15,6 +15,7 @@ import { Markets } from './collections/Markets'
 import { Franchises } from './collections/Franchises'
 import { FranchiseCategories } from './collections/FranchiseCategories'
 import { Views } from './collections/Views'
+import { UserLogs } from './collections/UserLogs'
 
 import { 
   franchiseViewsReport,
@@ -38,6 +39,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    routes: {
+      browseByFolder: '/browse',
+    },
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
@@ -50,7 +54,7 @@ export default buildConfig({
       titleSuffix: '- Franchise CMS',
     },
   },
-  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views],
+  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views, UserLogs],
   endpoints: [
     {
       path: '/reports/franchise-views',

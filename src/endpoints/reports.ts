@@ -365,7 +365,7 @@ export const totalMarketsReport = async (req: any) => {
 
     // Group by province
     const provinceCounts = allMarkets.docs.reduce((acc: any, market: any) => {
-      const province = market.province
+      const province = market.address?.province
       if (province) {
         if (!acc[province]) {
           acc[province] = { province, count: 0 }
@@ -560,7 +560,7 @@ export const allReportsData = async (req: any) => {
     const totalMarketsCount = await payload.count({ collection: 'markets' })
     const allMarkets = await payload.find({ collection: 'markets', limit: 5000 })
     const provinceCountsMarket = allMarkets.docs.reduce((acc: any, market: any) => {
-      const province = market.province
+      const province = market.address?.province
       if (province) {
         if (!acc[province]) acc[province] = { province, count: 0 }
         acc[province].count++

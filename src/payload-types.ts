@@ -770,9 +770,17 @@ export interface View {
 export interface UserLog {
   id: number;
   /**
-   * The user who performed the activity
+   * The user ID who performed the activity
    */
-  user: number | User;
+  user: string;
+  /**
+   * The email of the user who performed the activity
+   */
+  userEmail?: string | null;
+  /**
+   * The role of the user who performed the activity
+   */
+  userRole?: ('admin' | 'user') | null;
   /**
    * Type of activity performed
    */
@@ -1505,6 +1513,8 @@ export interface ViewsSelect<T extends boolean = true> {
  */
 export interface UserLogsSelect<T extends boolean = true> {
   user?: T;
+  userEmail?: T;
+  userRole?: T;
   activity?: T;
   details?: T;
   ipAddress?: T;

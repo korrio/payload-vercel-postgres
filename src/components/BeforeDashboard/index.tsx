@@ -6,12 +6,15 @@ import './index.scss'
 
 const baseClass = 'before-dashboard'
 
+// import ReportDashboard from '@/components/ReportDashboard'
+
 const BeforeDashboard: React.FC = () => {
   return (
     <div className={baseClass}>
       <Banner className={`${baseClass}__banner`} type="success">
         <h4>Welcome to your dashboard!</h4>
       </Banner>
+      {/*<ReportDashboard />*/}
       Here&apos;s what to do next:
       <ul className={`${baseClass}__instructions`}>
         <li>

@@ -4,8 +4,8 @@ export const UserLogs: CollectionConfig = {
   slug: 'user-logs',
   admin: {
     useAsTitle: 'activity',
-    defaultColumns: ['activity', 'user', 'timestamp', 'ipAddress'],
-    listSearchableFields: ['activity', 'user', 'ipAddress'],
+    defaultColumns: ['activity', 'userEmail', 'userRole', 'timestamp', 'success'],
+    listSearchableFields: ['activity', 'userEmail', 'userRole', 'ipAddress'],
   },
   access: {
     read: ({ req: { user } }) => {
@@ -26,6 +26,24 @@ export const UserLogs: CollectionConfig = {
       required: true,
       admin: {
         description: 'The user ID who performed the activity',
+      },
+    },
+    {
+      name: 'userEmail',
+      type: 'text',
+      admin: {
+        description: 'The email of the user who performed the activity',
+      },
+    },
+    {
+      name: 'userRole',
+      type: 'select',
+      options: [
+        { label: 'Admin', value: 'admin' },
+        { label: 'User', value: 'user' },
+      ],
+      admin: {
+        description: 'The role of the user who performed the activity',
       },
     },
     {

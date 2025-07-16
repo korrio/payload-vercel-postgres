@@ -48,7 +48,7 @@ export default buildConfig({
       // beforeLogin: ['@/components/BeforeLogin'],
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard', '@/components/SummaryDashboard'],
+      beforeDashboard: [],
     },
     meta: {
       titleSuffix: '- Franchise CMS',
@@ -121,6 +121,7 @@ export default buildConfig({
         "https://franchise-frontend-prod.vercel.app",
         "https://bestfranchisethailand.com",
         "http://localhost:3000",
+        "http://localhost:3002",
         "http://localhost:3030",
     ].filter((url): url is string => typeof url === 'string'),
   db: vercelPostgresAdapter({

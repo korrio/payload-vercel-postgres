@@ -1,8 +1,29 @@
 import type { Payload } from 'payload'
 
+type ActivityType = 
+  | 'login'
+  | 'logout'
+  | 'profile_update'
+  | 'password_change'
+  | 'email_change'
+  | 'franchise_created'
+  | 'franchise_updated'
+  | 'franchise_deleted'
+  | 'market_created'
+  | 'market_updated'
+  | 'market_deleted'
+  | 'post_created'
+  | 'post_updated'
+  | 'post_deleted'
+  | 'media_uploaded'
+  | 'media_deleted'
+  | 'failed_login'
+
 export interface ActivityLogData {
   user: string
-  activity: string
+  userEmail?: string
+  userRole?: string
+  activity: ActivityType
   details?: any
   ipAddress?: string
   userAgent?: string
@@ -34,14 +55,36 @@ export class ActivityLogger {
     }
   }
 
+  private async getUserDetails(userId: string): Promise<{ email?: string; role?: string }> {
+    try {
+      const user = await this.payload.findByID({
+        collection: 'users',
+        id: userId,
+      })
+      
+      return {
+        email: user.email,
+        role: user.role,
+      }
+    } catch (error) {
+      console.error('Failed to fetch user details:', error)
+      return {}
+    }
+  }
+
   async logActivity(data: ActivityLogData, req?: any): Promise<void> {
     try {
-      const clientInfo = req ? this.getClientInfo(req) : {}
+      const clientInfo = req ? this.getClientInfo(req) : { ipAddress: undefined, userAgent: undefined }
+      
+      // Fetch user details if not provided
+      const userDetails = (!data.userEmail || !data.userRole) ? await this.getUserDetails(data.user) : {}
       
       await this.payload.create({
         collection: 'user-logs',
         data: {
           user: data.user,
+          userEmail: data.userEmail || userDetails.email,
+          userRole: (data.userRole || userDetails.role) as 'admin' | 'user' | undefined,
           activity: data.activity,
           details: data.details,
           ipAddress: data.ipAddress || clientInfo.ipAddress,
@@ -87,7 +130,9 @@ export class ActivityLogger {
 
       if (user.docs.length > 0) {
         await this.logActivity({
-          user: user.docs[0].id,
+          user: String(user.docs[0].id),
+          userEmail: user.docs[0].email,
+          userRole: user.docs[0].role,
           activity: 'failed_login',
           success: false,
           errorMessage,
@@ -124,7 +169,7 @@ export class ActivityLogger {
 
   async logDocumentActivity(
     userId: string, 
-    activity: string, 
+    activity: ActivityType, 
     collection: string, 
     documentId: string, 
     details?: any, 
@@ -141,7 +186,7 @@ export class ActivityLogger {
     }, req)
   }
 
-  async logMediaActivity(userId: string, activity: string, mediaId: string, filename?: string, req?: any): Promise<void> {
+  async logMediaActivity(userId: string, activity: ActivityType, mediaId: string, filename?: string, req?: any): Promise<void> {
     await this.logActivity({
       user: userId,
       activity,

@@ -8,10 +8,7 @@ export const UserLogs: CollectionConfig = {
     listSearchableFields: ['activity', 'userEmail', 'userRole', 'ipAddress'],
   },
   access: {
-    read: ({ req: { user } }) => {
-      if (user?.role === 'admin') return true
-      return false
-    },
+    read: () => true, // Allow anyone to read logs
     create: () => true,
     update: () => false,
     delete: ({ req: { user } }) => {

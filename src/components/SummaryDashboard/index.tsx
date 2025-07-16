@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 // import { useConfig } from 'payload/components/utilities';
 import Link from 'next/link'
 // Interface for our summary data
+import { SeedButton } from '@/components/BeforeDasboard/SeedButton'
 interface SummaryData {
   posts: {
     total: number
@@ -182,6 +183,7 @@ const SummaryDashboard: React.FC = () => {
   // Render dashboard with data
   return (
     <div className="hidden container mx-auto px-4 py-8">
+      <SeedButton />
       <div className="dashboard__card-list">
         <div className="card card-pages card--has-onclick">
           <div className="flex items-center justify-between">

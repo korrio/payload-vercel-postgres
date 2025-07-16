@@ -1,7 +1,7 @@
 import type { Payload, PayloadRequest } from 'payload'
 // import { seedFranchises } from './seedFranchises'
 // import { seedFranchisesDbd } from './seedFranchisesDbd'
-// import { uploadFranchisesDbdLogos } from './uploadFranchisesDbdLogos'
+import { uploadFranchisesDbdLogos } from './uploadFranchisesDbdLogos'
 // import { seedMarkets } from './seedMarkets'
 
 // import { updateFranchiseCategories } from './updateFranchiseCategories'
@@ -36,7 +36,7 @@ export const seed = async ({
 
   // payload.logger.info('Database seeding Franchise completed successfully!')
 
-  // await uploadFranchisesDbdLogos({ payload, req })
+  await uploadFranchisesDbdLogos({ payload, req })
 
   // payload.logger.info('Logo seeding completed successfully!')
 

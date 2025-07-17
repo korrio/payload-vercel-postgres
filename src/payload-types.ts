@@ -591,8 +591,6 @@ export interface Market {
      */
     click?: number | null;
   };
-  created_at?: string | null;
-  updated_at?: string | null;
   createdBy?: (number | null) | User;
   updatedBy?: (number | null) | User;
   updatedAt: string;
@@ -1367,8 +1365,6 @@ export interface MarketsSelect<T extends boolean = true> {
     | {
         click?: T;
       };
-  created_at?: T;
-  updated_at?: T;
   createdBy?: T;
   updatedBy?: T;
   updatedAt?: T;

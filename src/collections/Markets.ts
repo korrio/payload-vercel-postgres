@@ -751,26 +751,6 @@ export const Markets: CollectionConfig = {
             //   },
             // },
             {
-              name: 'created_at',
-              type: 'date',
-              admin: {
-                readOnly: true,
-                date: {
-                  pickerAppearance: 'dayAndTime',
-                },
-              },
-            },
-            {
-              name: 'updated_at',
-              type: 'date',
-              admin: {
-                readOnly: true,
-                date: {
-                  pickerAppearance: 'dayAndTime',
-                },
-              },
-            },
-            {
       name: 'createdBy',
       type: 'relationship',
       relationTo: 'users',
@@ -828,15 +808,6 @@ export const Markets: CollectionConfig = {
           }
           return data;
         }
-
-                const now = new Date();
-        
-        // Update timestamps
-        if (!data.created_at) {
-          data.created_at = now;
-        }
-        
-        data.updated_at = now;
       },
     ]
   },

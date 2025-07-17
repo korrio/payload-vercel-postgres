@@ -121,6 +121,7 @@ export default buildConfig({
         "https://franchise-frontend-prod.vercel.app",
         "https://bestfranchisethailand.com",
         "http://localhost:3000",
+        "http://localhost:3001",
         "http://localhost:3002",
         "http://localhost:3030",
     ].filter((url): url is string => typeof url === 'string'),

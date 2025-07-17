@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 // import { useConfig } from 'payload/components/utilities';
 import Link from 'next/link'
 // Interface for our summary data
-import { SeedButton } from '@/components/BeforeDasboard/SeedButton'
+import { SeedButton } from '@/components/BeforeDashboard/SeedButton'
 interface SummaryData {
   posts: {
     total: number

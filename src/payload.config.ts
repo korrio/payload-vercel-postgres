@@ -1,6 +1,10 @@
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import nodemailer from 'nodemailer'
+
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -120,6 +124,7 @@ export default buildConfig({
   cors: [
         "https://franchise-frontend-prod.vercel.app",
         "https://bestfranchisethailand.com",
+        "https://franchise-frontend-one.vercel.app",
         "http://localhost:3000",
         "http://localhost:3001",
         "http://localhost:3002",
@@ -129,6 +134,19 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
     },
+  }),
+  email: nodemailerAdapter({
+    defaultFromAddress: 'info@mail.aq1.co',
+    defaultFromName: 'Best Franchise Thailand',
+    // Any Nodemailer transport can be used
+    transport: nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 587,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    }),
   }),
   // plugins: [
   //   vercelBlobStorage({

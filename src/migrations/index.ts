@@ -1,5 +1,6 @@
 import * as migration_20250522_154829_initial from './20250522_154829_initial';
 import * as migration_20250716_074409_add_user_email_role_columns_only from './20250716_074409_add_user_email_role_columns_only';
+import * as migration_20250723_054240_sessions from './20250723_054240_sessions';
 
 export const migrations = [
   {
@@ -10,6 +11,11 @@ export const migrations = [
   {
     up: migration_20250716_074409_add_user_email_role_columns_only.up,
     down: migration_20250716_074409_add_user_email_role_columns_only.down,
-    name: '20250716_074409_add_user_email_role_columns_only'
+    name: '20250716_074409_add_user_email_role_columns_only',
+  },
+  {
+    up: migration_20250723_054240_sessions.up,
+    down: migration_20250723_054240_sessions.down,
+    name: '20250723_054240_sessions'
   },
 ];

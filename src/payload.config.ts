@@ -140,13 +140,15 @@ export default buildConfig({
     defaultFromName: 'Best Franchise Thailand',
     // Any Nodemailer transport can be used
     transport: nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
+      host: process.env.SMTP_HOST || 'localhost',
       port: 587,
       auth: {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASS,
       },
     }),
+    // Skip verification during build process
+    skipVerify: process.env.NODE_ENV === 'production' || process.env.SKIP_EMAIL_VERIFY === 'true',
   }),
   // plugins: [
   //   vercelBlobStorage({

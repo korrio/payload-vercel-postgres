@@ -2,6 +2,14 @@
 import type { CollectionConfig } from 'payload'
 // import { slugField } from '@/fields/slug'
 
+import {
+  MetaDescriptionField,
+  MetaImageField,
+  MetaTitleField,
+  OverviewField,
+  PreviewField,
+} from '@payloadcms/plugin-seo/fields'
+
 export const Markets: CollectionConfig = {
   slug: 'markets',
   admin: {
@@ -25,6 +33,7 @@ export const Markets: CollectionConfig = {
             {
               name: 'meta',
               type: 'group',
+              label: 'SEO & Meta Information',
               fields: [
                 {
                   name: 'slug',
@@ -34,21 +43,25 @@ export const Markets: CollectionConfig = {
                     description: 'URL Slug สำหรับตลาด',
                   },
                 },
-                // {
-                //   name: 'title',
-                //   type: 'text',
-                //   required: true,
-                //   admin: {
-                //     description: 'ชื่อ SEO สำหรับหน้าตลาด',
-                //   },
-                // },
-                {
-                  name: 'description',
-                  type: 'textarea',
-                  admin: {
-                    description: 'คำอธิบาย SEO สำหรับหน้าตลาด',
-                  },
-                },
+                OverviewField({
+                  titlePath: 'meta.title',
+                  descriptionPath: 'meta.description',
+                  imagePath: 'meta.image',
+                }),
+                MetaTitleField({
+                  hasGenerateFn: true,
+                }),
+                MetaImageField({
+                  relationTo: 'media',
+                }),
+                MetaDescriptionField({}),
+                PreviewField({
+                  // if the `generateUrl` function is configured
+                  hasGenerateFn: true,
+                  // field paths to match the target field for data
+                  titlePath: 'meta.title',
+                  descriptionPath: 'meta.description',
+                }),
               ],
             },
 

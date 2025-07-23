@@ -361,9 +361,11 @@ export interface Market {
      * URL Slug สำหรับตลาด
      */
     slug: string;
+    title?: string | null;
     /**
-     * คำอธิบาย SEO สำหรับหน้าตลาด
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
+    image?: (number | null) | Media;
     description?: string | null;
   };
   title: string;
@@ -700,6 +702,14 @@ export interface Franchise {
   franchise_categories?: (number | FranchiseCategory)[] | null;
   createdBy?: (number | null) | User;
   updatedBy?: (number | null) | User;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1205,6 +1215,8 @@ export interface MarketsSelect<T extends boolean = true> {
     | T
     | {
         slug?: T;
+        title?: T;
+        image?: T;
         description?: T;
       };
   title?: T;
@@ -1484,6 +1496,13 @@ export interface FranchisesSelect<T extends boolean = true> {
   franchise_categories?: T;
   createdBy?: T;
   updatedBy?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

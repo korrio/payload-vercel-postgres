@@ -20,6 +20,8 @@ import { Franchises } from './collections/Franchises'
 import { FranchiseCategories } from './collections/FranchiseCategories'
 import { Views } from './collections/Views'
 import { UserLogs } from './collections/UserLogs'
+import { Pages } from './collections/Pages'
+import { Contact } from './collections/Contact'
 
 import { 
   franchiseViewsReport,
@@ -58,7 +60,8 @@ export default buildConfig({
       titleSuffix: '- Franchise CMS',
     },
   },
-  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views, UserLogs],
+  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views, UserLogs, Pages],
+  globals: [Contact],
   endpoints: [
     {
       path: '/reports/franchise-views',

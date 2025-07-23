@@ -77,6 +77,7 @@ export interface Config {
     franchise_categories: FranchiseCategory;
     views: View;
     'user-logs': UserLog;
+    pages: Page;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     franchise_categories: FranchiseCategoriesSelect<false> | FranchiseCategoriesSelect<true>;
     views: ViewsSelect<false> | ViewsSelect<true>;
     'user-logs': UserLogsSelect<false> | UserLogsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -102,8 +104,12 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    contact: Contact;
+  };
+  globalsSelect: {
+    contact: ContactSelect<false> | ContactSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -856,6 +862,79 @@ export interface UserLog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  pageType: 'homepage' | 'franchise-page' | 'market-page' | 'complaint-page' | 'contact-page';
+  /**
+   * URL path for this page
+   */
+  slug: string;
+  /**
+   * Main content for the page
+   */
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Short description of the page
+   */
+  excerpt?: string | null;
+  /**
+   * Main image for the page
+   */
+  featuredImage?: (number | null) | Media;
+  /**
+   * Additional images for the page
+   */
+  gallery?:
+    | {
+        image: number | Media;
+        alt?: string | null;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  customFields?: {
+    showBreadcrumb?: boolean | null;
+    headerStyle?: ('default' | 'minimal' | 'full-width') | null;
+    /**
+     * CSS color value (e.g., #ffffff, rgb(255,255,255))
+     */
+    backgroundColor?: string | null;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  status?: ('draft' | 'published' | 'archived') | null;
+  publishedAt?: string | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -992,6 +1071,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'user-logs';
         value: number | UserLog;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1555,6 +1638,47 @@ export interface UserLogsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  pageType?: T;
+  slug?: T;
+  content?: T;
+  excerpt?: T;
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        caption?: T;
+        id?: T;
+      };
+  customFields?:
+    | T
+    | {
+        showBreadcrumb?: T;
+        headerStyle?: T;
+        backgroundColor?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  status?: T;
+  publishedAt?: T;
+  createdBy?: T;
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
@@ -1615,6 +1739,191 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact".
+ */
+export interface Contact {
+  id: number;
+  companyInfo: {
+    companyName: string;
+    address: string;
+    phone: string;
+    email: string;
+  };
+  socialMedia?: {
+    /**
+     * LINE Official Account URL
+     */
+    line?: string | null;
+    /**
+     * Facebook page URL
+     */
+    facebook?: string | null;
+    /**
+     * TikTok account URL
+     */
+    tiktok?: string | null;
+    /**
+     * Instagram account URL (optional)
+     */
+    instagram?: string | null;
+    /**
+     * YouTube channel URL (optional)
+     */
+    youtube?: string | null;
+    /**
+     * Twitter/X account URL (optional)
+     */
+    twitter?: string | null;
+  };
+  location?: {
+    /**
+     * Google Maps iframe embed code
+     */
+    mapEmbed?: string | null;
+    coordinates?: {
+      /**
+       * GPS Latitude coordinate
+       */
+      latitude?: number | null;
+      /**
+       * GPS Longitude coordinate
+       */
+      longitude?: number | null;
+    };
+    /**
+     * Direct link to Google Maps location
+     */
+    googleMapsLink?: string | null;
+  };
+  businessHours?: {
+    description?: string | null;
+    weekdays?: {
+      open?: string | null;
+      close?: string | null;
+    };
+    weekends?: {
+      open?: string | null;
+      close?: string | null;
+    };
+    /**
+     * Business hours during holidays
+     */
+    holidays?: string | null;
+  };
+  additionalInfo?: {
+    /**
+     * Show contact form on contact page
+     */
+    contactForm?: boolean | null;
+    supportLanguages?: ('th' | 'en' | 'zh' | 'ja')[] | null;
+    /**
+     * Different departments for specific inquiries
+     */
+    departments?:
+      | {
+          name: string;
+          email?: string | null;
+          phone?: string | null;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    emergencyContact?: {
+      /**
+       * Emergency contact number
+       */
+      phone?: string | null;
+      /**
+       * Emergency contact email
+       */
+      email?: string | null;
+    };
+  };
+  updatedBy?: (number | null) | User;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact_select".
+ */
+export interface ContactSelect<T extends boolean = true> {
+  companyInfo?:
+    | T
+    | {
+        companyName?: T;
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  socialMedia?:
+    | T
+    | {
+        line?: T;
+        facebook?: T;
+        tiktok?: T;
+        instagram?: T;
+        youtube?: T;
+        twitter?: T;
+      };
+  location?:
+    | T
+    | {
+        mapEmbed?: T;
+        coordinates?:
+          | T
+          | {
+              latitude?: T;
+              longitude?: T;
+            };
+        googleMapsLink?: T;
+      };
+  businessHours?:
+    | T
+    | {
+        description?: T;
+        weekdays?:
+          | T
+          | {
+              open?: T;
+              close?: T;
+            };
+        weekends?:
+          | T
+          | {
+              open?: T;
+              close?: T;
+            };
+        holidays?: T;
+      };
+  additionalInfo?:
+    | T
+    | {
+        contactForm?: T;
+        supportLanguages?: T;
+        departments?:
+          | T
+          | {
+              name?: T;
+              email?: T;
+              phone?: T;
+              description?: T;
+              id?: T;
+            };
+        emergencyContact?:
+          | T
+          | {
+              phone?: T;
+              email?: T;
+            };
+      };
+  updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

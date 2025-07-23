@@ -2,6 +2,8 @@ import * as migration_20250522_154829_initial from './20250522_154829_initial';
 import * as migration_20250716_074409_add_user_email_role_columns_only from './20250716_074409_add_user_email_role_columns_only';
 import * as migration_20250723_054240_sessions from './20250723_054240_sessions';
 import * as migration_20250723_150459_seo_fields from './20250723_150459_seo_fields';
+import * as migration_20250723_151944_pages_collection from './20250723_151944_pages_collection';
+import * as migration_20250723_152823_contact_global from './20250723_152823_contact_global';
 
 export const migrations = [
   {
@@ -22,6 +24,16 @@ export const migrations = [
   {
     up: migration_20250723_150459_seo_fields.up,
     down: migration_20250723_150459_seo_fields.down,
-    name: '20250723_150459_seo_fields'
+    name: '20250723_150459_seo_fields',
+  },
+  {
+    up: migration_20250723_151944_pages_collection.up,
+    down: migration_20250723_151944_pages_collection.down,
+    name: '20250723_151944_pages_collection',
+  },
+  {
+    up: migration_20250723_152823_contact_global.up,
+    down: migration_20250723_152823_contact_global.down,
+    name: '20250723_152823_contact_global'
   },
 ];

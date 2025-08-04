@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const Contact: GlobalConfig = {
   slug: 'contact',
-  label: 'Contact Information',
+  label: 'Miscellaneous',
   admin: {
     group: 'การจัดการหน้า',
   },
@@ -10,6 +10,111 @@ export const Contact: GlobalConfig = {
     read: () => true,
   },
   fields: [
+    {
+      name: 'additionalInfo',
+      type: 'group',
+      label: 'Additional Information',
+      fields: [
+        {
+          name: 'contactForm',
+          type: 'checkbox',
+          label: 'Enable Contact Form',
+          defaultValue: true,
+          admin: {
+            description: 'Show contact form on contact page',
+          },
+        },
+        {
+          name: 'maintenanceMode',
+          type: 'checkbox',
+          label: 'Enable Maintenance Mode',
+          defaultValue: false,
+          admin: {
+            description: 'Turn on/off maintenance page for frontend website',
+          },
+        },
+        {
+          name: 'supportLanguages',
+          type: 'select',
+          label: 'Support Languages',
+          hasMany: true,
+          options: [
+            {
+              label: 'ไทย (Thai)',
+              value: 'th',
+            },
+            {
+              label: 'English',
+              value: 'en',
+            },
+            {
+              label: '中文 (Chinese)',
+              value: 'zh',
+            },
+            {
+              label: '日本語 (Japanese)',
+              value: 'ja',
+            },
+          ],
+          defaultValue: ['th', 'en'],
+        },
+        {
+          name: 'departments',
+          type: 'array',
+          label: 'Contact Departments',
+          fields: [
+            {
+              name: 'name',
+              type: 'text',
+              label: 'Department Name',
+              required: true,
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Department Email',
+            },
+            {
+              name: 'phone',
+              type: 'text',
+              label: 'Department Phone',
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Department Description',
+            },
+          ],
+          admin: {
+            initCollapsed: true,
+            description: 'Different departments for specific inquiries',
+          },
+        },
+        {
+          name: 'emergencyContact',
+          type: 'group',
+          label: 'Emergency Contact',
+          fields: [
+            {
+              name: 'phone',
+              type: 'text',
+              label: 'Emergency Phone',
+              admin: {
+                description: 'Emergency contact number',
+              },
+            },
+            {
+              name: 'email',
+              type: 'email',
+              label: 'Emergency Email',
+              admin: {
+                description: 'Emergency contact email',
+              },
+            },
+          ],
+        },
+      ],
+    },
     {
       name: 'companyInfo',
       type: 'group',
@@ -209,102 +314,6 @@ export const Contact: GlobalConfig = {
           admin: {
             description: 'Business hours during holidays',
           },
-        },
-      ],
-    },
-    {
-      name: 'additionalInfo',
-      type: 'group',
-      label: 'Additional Information',
-      fields: [
-        {
-          name: 'contactForm',
-          type: 'checkbox',
-          label: 'Enable Contact Form',
-          defaultValue: true,
-          admin: {
-            description: 'Show contact form on contact page',
-          },
-        },
-        {
-          name: 'supportLanguages',
-          type: 'select',
-          label: 'Support Languages',
-          hasMany: true,
-          options: [
-            {
-              label: 'ไทย (Thai)',
-              value: 'th',
-            },
-            {
-              label: 'English',
-              value: 'en',
-            },
-            {
-              label: '中文 (Chinese)',
-              value: 'zh',
-            },
-            {
-              label: '日本語 (Japanese)',
-              value: 'ja',
-            },
-          ],
-          defaultValue: ['th', 'en'],
-        },
-        {
-          name: 'departments',
-          type: 'array',
-          label: 'Contact Departments',
-          fields: [
-            {
-              name: 'name',
-              type: 'text',
-              label: 'Department Name',
-              required: true,
-            },
-            {
-              name: 'email',
-              type: 'email',
-              label: 'Department Email',
-            },
-            {
-              name: 'phone',
-              type: 'text',
-              label: 'Department Phone',
-            },
-            {
-              name: 'description',
-              type: 'textarea',
-              label: 'Department Description',
-            },
-          ],
-          admin: {
-            initCollapsed: true,
-            description: 'Different departments for specific inquiries',
-          },
-        },
-        {
-          name: 'emergencyContact',
-          type: 'group',
-          label: 'Emergency Contact',
-          fields: [
-            {
-              name: 'phone',
-              type: 'text',
-              label: 'Emergency Phone',
-              admin: {
-                description: 'Emergency contact number',
-              },
-            },
-            {
-              name: 'email',
-              type: 'email',
-              label: 'Emergency Email',
-              admin: {
-                description: 'Emergency contact email',
-              },
-            },
-          ],
         },
       ],
     },

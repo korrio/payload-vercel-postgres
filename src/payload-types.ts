@@ -78,6 +78,7 @@ export interface Config {
     views: View;
     'user-logs': UserLog;
     pages: Page;
+    'contact-forms': ContactForm;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -96,6 +97,7 @@ export interface Config {
     views: ViewsSelect<false> | ViewsSelect<true>;
     'user-logs': UserLogsSelect<false> | UserLogsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'contact-forms': ContactFormsSelect<false> | ContactFormsSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -935,6 +937,74 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-forms".
+ */
+export interface ContactForm {
+  id: number;
+  /**
+   * Full name of the person submitting the form
+   */
+  name: string;
+  /**
+   * Contact email address
+   */
+  email: string;
+  /**
+   * Contact phone number (optional)
+   */
+  phone?: string | null;
+  /**
+   * Company or organization name (optional)
+   */
+  company?: string | null;
+  /**
+   * Subject of the inquiry
+   */
+  subject: string;
+  /**
+   * Detailed message or inquiry
+   */
+  message: string;
+  inquiryType?: ('general' | 'franchise' | 'market' | 'support' | 'partnership' | 'complaint' | 'other') | null;
+  status?: ('new' | 'in-progress' | 'resolved' | 'closed') | null;
+  priority?: ('low' | 'normal' | 'high' | 'urgent') | null;
+  /**
+   * Source of the contact form submission
+   */
+  source?: string | null;
+  /**
+   * IP address of the submitter
+   */
+  ipAddress?: string | null;
+  /**
+   * Browser information
+   */
+  userAgent?: string | null;
+  /**
+   * Staff member assigned to handle this inquiry
+   */
+  assignedTo?: (number | null) | User;
+  /**
+   * Internal notes for staff use only
+   */
+  internalNotes?: string | null;
+  /**
+   * Template for responding to this inquiry
+   */
+  responseTemplate?: ('standard-thank-you' | 'franchise-info' | 'market-info' | 'tech-support' | 'custom') | null;
+  /**
+   * Whether admin notification email was sent
+   */
+  emailSent?: boolean | null;
+  /**
+   * Whether auto-response email was sent to user
+   */
+  autoResponded?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -1075,6 +1145,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'contact-forms';
+        value: number | ContactForm;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1679,6 +1753,31 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-forms_select".
+ */
+export interface ContactFormsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  subject?: T;
+  message?: T;
+  inquiryType?: T;
+  status?: T;
+  priority?: T;
+  source?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  assignedTo?: T;
+  internalNotes?: T;
+  responseTemplate?: T;
+  emailSent?: T;
+  autoResponded?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
@@ -1746,6 +1845,39 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Contact {
   id: number;
+  additionalInfo?: {
+    /**
+     * Show contact form on contact page
+     */
+    contactForm?: boolean | null;
+    /**
+     * Turn on/off maintenance page for frontend website
+     */
+    maintenanceMode?: boolean | null;
+    supportLanguages?: ('th' | 'en' | 'zh' | 'ja')[] | null;
+    /**
+     * Different departments for specific inquiries
+     */
+    departments?:
+      | {
+          name: string;
+          email?: string | null;
+          phone?: string | null;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    emergencyContact?: {
+      /**
+       * Emergency contact number
+       */
+      phone?: string | null;
+      /**
+       * Emergency contact email
+       */
+      email?: string | null;
+    };
+  };
   companyInfo: {
     companyName: string;
     address: string;
@@ -1813,35 +1945,6 @@ export interface Contact {
      */
     holidays?: string | null;
   };
-  additionalInfo?: {
-    /**
-     * Show contact form on contact page
-     */
-    contactForm?: boolean | null;
-    supportLanguages?: ('th' | 'en' | 'zh' | 'ja')[] | null;
-    /**
-     * Different departments for specific inquiries
-     */
-    departments?:
-      | {
-          name: string;
-          email?: string | null;
-          phone?: string | null;
-          description?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    emergencyContact?: {
-      /**
-       * Emergency contact number
-       */
-      phone?: string | null;
-      /**
-       * Emergency contact email
-       */
-      email?: string | null;
-    };
-  };
   updatedBy?: (number | null) | User;
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1851,6 +1954,28 @@ export interface Contact {
  * via the `definition` "contact_select".
  */
 export interface ContactSelect<T extends boolean = true> {
+  additionalInfo?:
+    | T
+    | {
+        contactForm?: T;
+        maintenanceMode?: T;
+        supportLanguages?: T;
+        departments?:
+          | T
+          | {
+              name?: T;
+              email?: T;
+              phone?: T;
+              description?: T;
+              id?: T;
+            };
+        emergencyContact?:
+          | T
+          | {
+              phone?: T;
+              email?: T;
+            };
+      };
   companyInfo?:
     | T
     | {
@@ -1898,27 +2023,6 @@ export interface ContactSelect<T extends boolean = true> {
               close?: T;
             };
         holidays?: T;
-      };
-  additionalInfo?:
-    | T
-    | {
-        contactForm?: T;
-        supportLanguages?: T;
-        departments?:
-          | T
-          | {
-              name?: T;
-              email?: T;
-              phone?: T;
-              description?: T;
-              id?: T;
-            };
-        emergencyContact?:
-          | T
-          | {
-              phone?: T;
-              email?: T;
-            };
       };
   updatedBy?: T;
   updatedAt?: T;

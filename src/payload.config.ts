@@ -22,6 +22,7 @@ import { Views } from './collections/Views'
 import { UserLogs } from './collections/UserLogs'
 import { Pages } from './collections/Pages'
 import { Contact } from './collections/Contact'
+import { ContactForm } from './collections/ContactForm'
 
 import { 
   franchiseViewsReport,
@@ -35,6 +36,7 @@ import {
   allReportsData
 } from './endpoints/reports'
 import { trackView } from './endpoints/track-view'
+import { submitContactForm } from './endpoints/contact-form'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -60,7 +62,7 @@ export default buildConfig({
       titleSuffix: '- Franchise CMS',
     },
   },
-  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views, UserLogs, Pages],
+  collections: [Users, Media, Banners, Posts, Categories, Markets, Franchises, FranchiseCategories, Views, UserLogs, Pages, ContactForm],
   globals: [Contact],
   endpoints: [
     {
@@ -112,6 +114,11 @@ export default buildConfig({
       path: '/track-view',
       method: 'post',
       handler: trackView,
+    },
+    {
+      path: '/contact-form',
+      method: 'post',
+      handler: submitContactForm,
     },
   ],
   upload: {

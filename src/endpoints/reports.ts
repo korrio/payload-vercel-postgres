@@ -398,6 +398,43 @@ export const totalMarketsReport = async (req: any) => {
 export const allReportsData = async (req: any) => {
   try {
     const { payload } = req
+    const url = new URL(req.url)
+    const startDate = url.searchParams.get('startDate')
+    const endDate = url.searchParams.get('endDate')
+
+    // Create date filter if dates are provided
+    let dateFilter = {}
+    let viewsDateFilter = {}
+    
+    if (startDate && endDate) {
+      dateFilter = {
+        createdAt: {
+          greater_than_equal: new Date(startDate).toISOString(),
+          less_than_equal: new Date(endDate + 'T23:59:59.999Z').toISOString()
+        }
+      }
+      // For views collection, use viewedAt field
+      viewsDateFilter = {
+        viewedAt: {
+          greater_than_equal: new Date(startDate).toISOString(),
+          less_than_equal: new Date(endDate + 'T23:59:59.999Z').toISOString()
+        }
+      }
+    } else {
+      // Default to last 30 days if no dates provided
+      const thirtyDaysAgo = new Date()
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+      dateFilter = {
+        createdAt: {
+          greater_than_equal: thirtyDaysAgo.toISOString()
+        }
+      }
+      viewsDateFilter = {
+        viewedAt: {
+          greater_than_equal: thirtyDaysAgo.toISOString()
+        }
+      }
+    }
 
     // Get all report data directly without using individual report functions
     // to avoid the response mocking complexity
@@ -405,7 +442,12 @@ export const allReportsData = async (req: any) => {
     // 1. Franchise views
     const franchiseViewsData = await payload.find({
       collection: 'views',
-      where: { collectionName: { equals: 'franchises' } },
+      where: { 
+        and: [
+          { collectionName: { equals: 'franchises' } },
+          viewsDateFilter
+        ]
+      },
       limit: 1000,
     })
     const franchiseViewCounts = franchiseViewsData.docs.reduce((acc: any, view: any) => {
@@ -427,7 +469,8 @@ export const allReportsData = async (req: any) => {
       where: {
         and: [
           { collectionName: { equals: 'franchises' } },
-          { categoryId: { not_equals: '' } }
+          { categoryId: { not_equals: '' } },
+          viewsDateFilter
         ]
       },
       limit: 1000,
@@ -446,11 +489,9 @@ export const allReportsData = async (req: any) => {
     }
 
     // 3. New franchises
-    const thirtyDaysAgo = new Date()
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
     const newFranchisesData = await payload.find({
       collection: 'franchises',
-      where: { createdAt: { greater_than_equal: thirtyDaysAgo.toISOString() } },
+      where: dateFilter,
       sort: '-createdAt',
       limit: 1000,
     })
@@ -495,7 +536,12 @@ export const allReportsData = async (req: any) => {
     // 5. Market views
     const marketViewsData = await payload.find({
       collection: 'views',
-      where: { collectionName: { equals: 'markets' } },
+      where: { 
+        and: [
+          { collectionName: { equals: 'markets' } },
+          viewsDateFilter
+        ]
+      },
       limit: 1000,
     })
     const marketViewCounts = marketViewsData.docs.reduce((acc: any, view: any) => {
@@ -517,7 +563,8 @@ export const allReportsData = async (req: any) => {
       where: {
         and: [
           { collectionName: { equals: 'markets' } },
-          { categoryId: { not_equals: '' } }
+          { categoryId: { not_equals: '' } },
+          viewsDateFilter
         ]
       },
       limit: 1000,
@@ -538,7 +585,7 @@ export const allReportsData = async (req: any) => {
     // 7. New markets
     const newMarketsData = await payload.find({
       collection: 'markets',
-      where: { createdAt: { greater_than_equal: thirtyDaysAgo.toISOString() } },
+      where: dateFilter,
       sort: '-createdAt',
       limit: 1000,
     })
@@ -575,6 +622,51 @@ export const allReportsData = async (req: any) => {
       }
     }
 
+    // 9. Post views (บทความ)
+    const postViewsData = await payload.find({
+      collection: 'views',
+      where: { 
+        and: [
+          { collectionName: { equals: 'posts' } },
+          viewsDateFilter
+        ]
+      },
+      limit: 1000,
+    })
+    const postViewCounts = postViewsData.docs.reduce((acc: any, view: any) => {
+      const key = view.documentId
+      if (!acc[key]) {
+        acc[key] = { documentId: view.documentId, documentTitle: view.documentTitle || '', viewCount: 0 }
+      }
+      acc[key].viewCount++
+      return acc
+    }, {} as Record<string, any>)
+    const postViews = { 
+      success: true, 
+      data: Object.values(postViewCounts).sort((a: any, b: any) => b.viewCount - a.viewCount).slice(0, 10) 
+    }
+
+    // 10. New posts
+    const newPostsData = await payload.find({
+      collection: 'posts',
+      where: dateFilter,
+      sort: '-createdAt',
+      limit: 1000,
+    })
+    const postsByDate = newPostsData.docs.reduce((acc: any, post: any) => {
+      const date = new Date(post.createdAt).toISOString().split('T')[0]
+      if (!acc[date]) acc[date] = { date, count: 0 }
+      acc[date].count++
+      return acc
+    }, {} as Record<string, any>)
+    const newPosts = {
+      success: true,
+      data: {
+        total: newPostsData.totalDocs,
+        byDate: Object.values(postsByDate).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      }
+    }
+
     return Response.json({
       success: true,
       data: {
@@ -586,6 +678,8 @@ export const allReportsData = async (req: any) => {
         provinceViews,
         newMarkets,
         totalMarkets,
+        postViews,
+        newPosts,
       },
     })
   } catch (error) {

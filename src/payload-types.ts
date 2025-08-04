@@ -867,7 +867,7 @@ export interface UserLog {
 export interface Page {
   id: number;
   title: string;
-  pageType: 'homepage' | 'franchise-page' | 'market-page' | 'complaint-page' | 'contact-page';
+  pageType: 'homepage' | 'franchise-page' | 'market-page' | 'article-page' | 'complaint-page' | 'contact-page';
   /**
    * URL path for this page
    */

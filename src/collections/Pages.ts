@@ -44,6 +44,10 @@ export const Pages: CollectionConfig = {
           value: 'market-page',
         },
         {
+          label: 'Article Page',
+          value: 'article-page',
+        },
+        {
           label: 'Complaint Page',
           value: 'complaint-page',
         },

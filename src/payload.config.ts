@@ -37,6 +37,7 @@ import {
 } from './endpoints/reports'
 import { trackView } from './endpoints/track-view'
 import { submitContactForm } from './endpoints/contact-form'
+import { seedPages } from './endpoints/seed-pages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -119,6 +120,11 @@ export default buildConfig({
       path: '/contact-form',
       method: 'post',
       handler: submitContactForm,
+    },
+    {
+      path: '/seed-pages',
+      method: 'post',
+      handler: seedPages,
     },
   ],
   upload: {

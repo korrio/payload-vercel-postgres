@@ -55,6 +55,10 @@ export const Pages: CollectionConfig = {
           label: 'Contact Page',
           value: 'contact-page',
         },
+        {
+          label: 'Expand Branches Page',
+          value: 'expand-branches-page',
+        },
       ],
       admin: {
         position: 'sidebar',
@@ -71,7 +75,7 @@ export const Pages: CollectionConfig = {
     },
     {
       name: 'content',
-      type: 'richText',
+      type: 'textarea',
       label: 'Page Content',
       admin: {
         description: 'Main content for the page',
@@ -118,6 +122,272 @@ export const Pages: CollectionConfig = {
       ],
       admin: {
         description: 'Additional images for the page',
+      },
+    },
+    {
+      name: 'contentBlocks',
+      type: 'blocks',
+      label: 'Page Content Blocks',
+      blocks: [
+        // Hero Block
+        {
+          slug: 'hero',
+          labels: {
+            singular: 'Hero Section',
+            plural: 'Hero Sections',
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+              label: 'Main Title',
+            },
+            {
+              name: 'subtitle',
+              type: 'textarea',
+              label: 'Subtitle',
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Description',
+            },
+            {
+              name: 'pricing',
+              type: 'text',
+              label: 'Pricing Text',
+            },
+            {
+              name: 'ctaButton',
+              type: 'group',
+              label: 'CTA Button',
+              fields: [
+                {
+                  name: 'text',
+                  type: 'text',
+                  label: 'Button Text',
+                },
+                {
+                  name: 'link',
+                  type: 'text',
+                  label: 'Button Link',
+                },
+              ],
+            },
+            {
+              name: 'backgroundColor',
+              type: 'text',
+              label: 'Background Color',
+              defaultValue: '#1A2380',
+            },
+          ],
+        },
+        // Text Section Block
+        {
+          slug: 'textSection',
+          labels: {
+            singular: 'Text Section',
+            plural: 'Text Sections',
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Section Title',
+            },
+            {
+              name: 'content',
+              type: 'textarea',
+              label: 'Content',
+            },
+            {
+              name: 'textAlign',
+              type: 'select',
+              label: 'Text Alignment',
+              options: [
+                { label: 'Left', value: 'left' },
+                { label: 'Center', value: 'center' },
+                { label: 'Right', value: 'right' },
+              ],
+              defaultValue: 'center',
+            },
+            {
+              name: 'backgroundColor',
+              type: 'text',
+              label: 'Background Color',
+              defaultValue: 'white',
+            },
+          ],
+        },
+        // Service Cards Block
+        {
+          slug: 'serviceCards',
+          labels: {
+            singular: 'Service Cards Section',
+            plural: 'Service Cards Sections',
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Section Title',
+            },
+            {
+              name: 'subtitle',
+              type: 'text',
+              label: 'Section Subtitle',
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              label: 'Section Description',
+            },
+            {
+              name: 'cards',
+              type: 'array',
+              label: 'Service Cards',
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  required: true,
+                  label: 'Card Title',
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  label: 'Card Description',
+                },
+                {
+                  name: 'icon',
+                  type: 'text',
+                  label: 'Icon Name (Lucide React)',
+                  admin: {
+                    description: 'Use Lucide React icon names like: Shield, ThumbsUp, FileText',
+                  },
+                },
+                {
+                  name: 'image',
+                  type: 'upload',
+                  relationTo: 'media',
+                  label: 'Card Image (optional)',
+                },
+              ],
+            },
+            {
+              name: 'backgroundColor',
+              type: 'text',
+              label: 'Background Color',
+              defaultValue: '#1A2380',
+            },
+            {
+              name: 'textColor',
+              type: 'text',
+              label: 'Text Color',
+              defaultValue: 'white',
+            },
+          ],
+        },
+        // Pricing Package Block
+        {
+          slug: 'pricingPackages',
+          labels: {
+            singular: 'Pricing Packages Section',
+            plural: 'Pricing Packages Sections',
+          },
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              label: 'Section Title',
+            },
+            {
+              name: 'packages',
+              type: 'array',
+              label: 'Pricing Packages',
+              fields: [
+                {
+                  name: 'name',
+                  type: 'text',
+                  required: true,
+                  label: 'Package Name',
+                },
+                {
+                  name: 'badge',
+                  type: 'text',
+                  label: 'Package Badge',
+                },
+                {
+                  name: 'price',
+                  type: 'text',
+                  label: 'Price Display',
+                },
+                {
+                  name: 'priceNote',
+                  type: 'text',
+                  label: 'Price Note',
+                },
+                {
+                  name: 'features',
+                  type: 'array',
+                  label: 'Package Features',
+                  fields: [
+                    {
+                      name: 'feature',
+                      type: 'text',
+                      required: true,
+                      label: 'Feature Text',
+                    },
+                  ],
+                },
+                {
+                  name: 'ctaButton',
+                  type: 'group',
+                  label: 'CTA Button',
+                  fields: [
+                    {
+                      name: 'text',
+                      type: 'text',
+                      label: 'Button Text',
+                    },
+                    {
+                      name: 'link',
+                      type: 'text',
+                      label: 'Button Link',
+                    },
+                    {
+                      name: 'color',
+                      type: 'text',
+                      label: 'Button Color',
+                      defaultValue: '#1A2380',
+                    },
+                  ],
+                },
+                {
+                  name: 'contactInfo',
+                  type: 'textarea',
+                  label: 'Contact Information',
+                },
+                {
+                  name: 'isVisible',
+                  type: 'checkbox',
+                  label: 'Show Package',
+                  defaultValue: true,
+                },
+              ],
+            },
+            {
+              name: 'backgroundColor',
+              type: 'text',
+              label: 'Background Color',
+              defaultValue: '#f7f7f7',
+            },
+          ],
+        },
+      ],
+      admin: {
+        description: 'Use content blocks to build your page layout',
       },
     },
     {

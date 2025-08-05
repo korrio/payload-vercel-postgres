@@ -268,11 +268,20 @@ export const ContactForm: CollectionConfig = {
           data.source = data.source || 'website';
           
           // Add IP address and user agent if available from request
-          if (req.ip) {
-            data.ipAddress = req.ip;
-          }
-          if (req.headers && req.headers['user-agent']) {
-            data.userAgent = req.headers['user-agent'];
+          if (req.headers) {
+            const forwardedFor = req.headers.get('x-forwarded-for');
+            const realIp = req.headers.get('x-real-ip');
+            const userAgent = req.headers.get('user-agent');
+            
+            if (forwardedFor) {
+              data.ipAddress = forwardedFor;
+            } else if (realIp) {
+              data.ipAddress = realIp;
+            }
+            
+            if (userAgent) {
+              data.userAgent = userAgent;
+            }
           }
         }
         return data;

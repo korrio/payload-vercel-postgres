@@ -288,36 +288,6 @@ export interface Post {
   id: number;
   title: string;
   heroImage?: (number | null) | Media;
-  content_html?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  content_textarea?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   content: {
     root: {
       type: string;
@@ -869,7 +839,14 @@ export interface UserLog {
 export interface Page {
   id: number;
   title: string;
-  pageType: 'homepage' | 'franchise-page' | 'market-page' | 'article-page' | 'complaint-page' | 'contact-page';
+  pageType:
+    | 'homepage'
+    | 'franchise-page'
+    | 'market-page'
+    | 'article-page'
+    | 'complaint-page'
+    | 'contact-page'
+    | 'expand-branches-page';
   /**
    * URL path for this page
    */
@@ -877,21 +854,7 @@ export interface Page {
   /**
    * Main content for the page
    */
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  content?: string | null;
   /**
    * Short description of the page
    */
@@ -910,6 +873,87 @@ export interface Page {
         caption?: string | null;
         id?: string | null;
       }[]
+    | null;
+  /**
+   * Use content blocks to build your page layout
+   */
+  contentBlocks?:
+    | (
+        | {
+            title: string;
+            subtitle?: string | null;
+            description?: string | null;
+            pricing?: string | null;
+            ctaButton?: {
+              text?: string | null;
+              link?: string | null;
+            };
+            backgroundColor?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            title?: string | null;
+            content?: string | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            backgroundColor?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textSection';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            description?: string | null;
+            cards?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  /**
+                   * Use Lucide React icon names like: Shield, ThumbsUp, FileText
+                   */
+                  icon?: string | null;
+                  image?: (number | null) | Media;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: string | null;
+            textColor?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'serviceCards';
+          }
+        | {
+            title?: string | null;
+            packages?:
+              | {
+                  name: string;
+                  badge?: string | null;
+                  price?: string | null;
+                  priceNote?: string | null;
+                  features?:
+                    | {
+                        feature: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  ctaButton?: {
+                    text?: string | null;
+                    link?: string | null;
+                    color?: string | null;
+                  };
+                  contactInfo?: string | null;
+                  isVisible?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'pricingPackages';
+          }
+      )[]
     | null;
   customFields?: {
     showBreadcrumb?: boolean | null;
@@ -1337,8 +1381,6 @@ export interface BannersSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
-  content_html?: T;
-  content_textarea?: T;
   content?: T;
   relatedPosts?: T;
   categories?: T;
@@ -1728,6 +1770,89 @@ export interface PagesSelect<T extends boolean = true> {
         alt?: T;
         caption?: T;
         id?: T;
+      };
+  contentBlocks?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              description?: T;
+              pricing?: T;
+              ctaButton?:
+                | T
+                | {
+                    text?: T;
+                    link?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textSection?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              textAlign?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        serviceCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              description?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              textColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        pricingPackages?:
+          | T
+          | {
+              title?: T;
+              packages?:
+                | T
+                | {
+                    name?: T;
+                    badge?: T;
+                    price?: T;
+                    priceNote?: T;
+                    features?:
+                      | T
+                      | {
+                          feature?: T;
+                          id?: T;
+                        };
+                    ctaButton?:
+                      | T
+                      | {
+                          text?: T;
+                          link?: T;
+                          color?: T;
+                        };
+                    contactInfo?: T;
+                    isVisible?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   customFields?:
     | T

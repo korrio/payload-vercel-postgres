@@ -4,6 +4,7 @@ import * as migration_20250723_054240_sessions from './20250723_054240_sessions'
 import * as migration_20250723_150459_seo_fields from './20250723_150459_seo_fields';
 import * as migration_20250723_151944_pages_collection from './20250723_151944_pages_collection';
 import * as migration_20250723_152823_contact_global from './20250723_152823_contact_global';
+import * as migration_20250805_021306 from './20250805_021306';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20250723_152823_contact_global.up,
     down: migration_20250723_152823_contact_global.down,
-    name: '20250723_152823_contact_global'
+    name: '20250723_152823_contact_global',
+  },
+  {
+    up: migration_20250805_021306.up,
+    down: migration_20250805_021306.down,
+    name: '20250805_021306'
   },
 ];

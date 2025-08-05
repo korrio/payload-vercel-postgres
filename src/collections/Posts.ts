@@ -82,17 +82,17 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'upload',
               relationTo: 'media',
             },
-            {
-              name: 'content_html',
-              type: 'richText',
-              label: 'เนื้อหา',
-            },
-            {
-              name: 'content_textarea',
-              type: 'richText', // Changed from 'textarea' to 'richText'
-              label: 'เนื้อหา textarea',
-              editor: lexicalEditor(),
-            },
+            // {
+            //   name: 'content_html',
+            //   type: 'richText',
+            //   label: 'เนื้อหา',
+            // },
+            // {
+            //   name: 'content_textarea',
+            //   type: 'richText',
+            //   label: 'เนื้อหา textarea',
+            //   editor: lexicalEditor(),
+            // },
             {
               name: 'content',
               type: 'richText',

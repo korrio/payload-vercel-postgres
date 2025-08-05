@@ -38,6 +38,7 @@ import {
 import { trackView } from './endpoints/track-view'
 import { submitContactForm } from './endpoints/contact-form'
 import { seedPages } from './endpoints/seed-pages'
+import { seedUsersMediaEndpoint } from './endpoints/seed-users-media'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -125,6 +126,11 @@ export default buildConfig({
       path: '/seed-pages',
       method: 'post',
       handler: seedPages,
+    },
+    {
+      path: '/seed-users-media',
+      method: 'post',
+      handler: seedUsersMediaEndpoint,
     },
   ],
   upload: {

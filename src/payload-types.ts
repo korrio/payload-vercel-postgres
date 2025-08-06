@@ -325,6 +325,24 @@ export interface Post {
 export interface Category {
   id: number;
   title: string;
+  meta?: {
+    /**
+     * Used for the page title in search results. If not provided, the category title will be used.
+     */
+    title?: string | null;
+    /**
+     * A brief description of the category for search engines (max 160 characters).
+     */
+    description?: string | null;
+    /**
+     * Comma-separated keywords related to this category.
+     */
+    keywords?: string | null;
+    /**
+     * Image used when this category is shared on social media.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1402,6 +1420,14 @@ export interface PostsSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        keywords?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

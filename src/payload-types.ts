@@ -720,6 +720,24 @@ export interface FranchiseCategory {
   description?: string | null;
   icon?: (number | null) | Media;
   parent?: (number | null) | FranchiseCategory;
+  meta?: {
+    /**
+     * Used for the page title in search results. If not provided, the category title will be used.
+     */
+    title?: string | null;
+    /**
+     * A brief description of the franchise category for search engines (max 160 characters).
+     */
+    description?: string | null;
+    /**
+     * Comma-separated keywords related to this franchise category.
+     */
+    keywords?: string | null;
+    /**
+     * Image used when this franchise category is shared on social media.
+     */
+    image?: (number | null) | Media;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1741,6 +1759,14 @@ export interface FranchiseCategoriesSelect<T extends boolean = true> {
   description?: T;
   icon?: T;
   parent?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        keywords?: T;
+        image?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
